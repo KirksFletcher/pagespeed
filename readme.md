@@ -84,7 +84,7 @@ The above command can be called at any time (is usually best to call just after 
 | Plugin | Description |
 |--|--|
 | 'removeComments' | Remove all html comments from rendered view |
-| 'trimWhiteSpace' | Remove all whitespace from html (magnification) |
+| 'trimWhiteSpace' | Remove all whitespace from html (minification) |
 
 (many more plugins being developed)
 
