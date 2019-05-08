@@ -1,5 +1,5 @@
 
-# Laravel Pagespeed
+# Laravel Pagespeed (for Laravel 5.7 and up)
 
 Pagespeed is a simple package to apply filters to the view output such as removing whitespace and comments (a lot more to come). The benefit is quite considerable page speed increase, great if you are looking to increase score on Google's Pagespeed Insights, and even better for a smooth user experience.
 
@@ -7,7 +7,15 @@ In addition to applying selected filters, rendered views are cached using the ca
 
 Obviously while this is good for static pages such as homepage, contact us etc, this will prevent the use of pages with dynamic content. However, if a user is logged in the package will skip serving the cached page and serve a dynamic page (still applying filters).
 
+
+### Installation
+
+    composer require kirksfletcher/pagespeed:dev-master
+
+
 ### Usage is simple: 
+
+
 
 Whilst you are free to choose your own implementation method, here is the one I like to use.
 
