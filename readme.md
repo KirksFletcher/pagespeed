@@ -10,7 +10,7 @@ Obviously while this is good for static pages such as homepage, contact us etc, 
 
 ### Installation
 
-    composer require kirksfletcher/pagespeed:dev-master
+    composer require kirksfletcher/pagespeed
 
 
 ### Usage is simple: 
