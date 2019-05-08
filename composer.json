@@ -1,0 +1,25 @@
+{
+    "name": "kirksfletcher/pagespeed",
+    "description": "Automatic view optimisation and caching system for Laravel rendered views",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Kirk Fletcher",
+            "email": "hello@kirkfletcher.co.uk"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "kirksfletcher\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "kirksfletcher\\pagespeed\\PagespeedServiceProvider"
+            ]
+        }
+    }
+}
