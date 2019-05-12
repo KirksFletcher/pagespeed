@@ -98,6 +98,8 @@ The above command will allow for dynamic page content but will create more cache
 |--|--|
 | 'removeComments' | Remove all html comments from rendered view |
 | 'trimWhiteSpace' | Remove all whitespace from html (minification) |
+| 'insertDNSPreconnect' | 'Inserts rel="preconnect" for each external resource on page"' |
+| 'insertPreload' | 'Insert preload for images, js, and css files' |
 
 (many more plugins being developed)
 

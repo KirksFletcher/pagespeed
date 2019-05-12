@@ -5,6 +5,8 @@ namespace kirksfletcher\pagespeed;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\View;
+use kirksfletcher\pagespeed\filters\InsertDNSPreconnect;
+use kirksfletcher\pagespeed\filters\InsertPreload;
 use kirksfletcher\pagespeed\filters\RemoveComments;
 use kirksfletcher\pagespeed\filters\RemoveWhiteSpace;
 use Mockery\Exception;
@@ -13,6 +15,8 @@ class Pagespeed
 {
     protected $trimWhiteSpace = false;
     protected $removeComments = false;
+    protected $insertDNSPreconnect = false;
+    protected $insertPreload = false;
     protected $allowDynamic = false;
 
     /**
@@ -42,8 +46,6 @@ class Pagespeed
                         return $this->renderView($view, $data);
                     });
                 }
-
-
 
             } else {
                 $view = $this->renderView($view, $data);
@@ -88,6 +90,12 @@ class Pagespeed
             case 'removecomments':
                 $this->removeComments = $enable;
                 break;
+            case 'insertdnspreconnect':
+                $this->insertDNSPreconnect = $enable;
+                break;
+            case 'insertpreload':
+                $this->insertPreload = $enable;
+                break;
         }
     }
 
@@ -99,11 +107,11 @@ class Pagespeed
      */
     public function allowDynamicContent($state = true)
     {
-        if(Cache::getStore() instanceof \Illuminate\Cache\TaggableStore) {
-            $this->allowDynamic = $state;
-        }else{
+        if (!Cache::getStore() instanceof \Illuminate\Cache\TaggableStore && $state) {
             throw new Exception('Dynamic content caching requires memcached or redis enabled as the cache driver.');
         }
+
+        $this->allowDynamic = $state;
     }
 
 
@@ -115,6 +123,14 @@ class Pagespeed
     private function renderView($view, $data)
     {
         $cacheView = View::make($view, $data)->render();
+
+        if ($this->insertPreload) {
+            $cacheView = InsertPreload::render($cacheView);
+        }
+
+        if ($this->insertDNSPreconnect) {
+            $cacheView = InsertDNSPreconnect::render($cacheView);
+        }
 
         if ($this->trimWhiteSpace) {
             $cacheView = RemoveWhiteSpace::render($cacheView);
