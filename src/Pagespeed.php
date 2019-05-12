@@ -31,22 +31,20 @@ class Pagespeed
     {
         try {
             if (!Auth::check()) {
-
-                if($this->allowDynamic) {
+                if ($this->allowDynamic) {
                     $cacheRef = md5(strtolower($view.$slug) . serialize($data));
                     $tag = ($slug == '') ? md5(strtolower($view)) : md5(strtolower($slug));
 
                     $view = Cache::tags([$tag])->rememberForever($cacheRef, function () use ($view, $data) {
                         return $this->renderView($view, $data);
                     });
-                }else{
+                } else {
                     $cacheRef = ($slug == '') ? md5(strtolower($view)) : md5(strtolower($slug));
 
                     $view = Cache::rememberForever($cacheRef, function () use ($view, $data) {
                         return $this->renderView($view, $data);
                     });
                 }
-
             } else {
                 $view = $this->renderView($view, $data);
             }
@@ -66,12 +64,11 @@ class Pagespeed
     {
         $slug = md5(strtolower($slug));
 
-        if($this->allowDynamic){
+        if ($this->allowDynamic) {
             Cache::tags([$slug])->flush();
-        }else{
+        } else {
             Cache::forget($slug);
         }
-
     }
 
     /**

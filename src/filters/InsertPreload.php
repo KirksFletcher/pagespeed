@@ -2,20 +2,21 @@
 
 namespace kirksfletcher\pagespeed\filters;
 
-
 class InsertPreload
 {
 
+    /**
+     * @param $view
+     * @return null|string|string[]
+     */
     public static function render($view)
     {
         preg_match_all('/(?i)"(.*)\/\/(.*).(js|css|jpg|jpeg|png|gif|webp)(.*)"/', $view, $matches);
 
         $preload = collect($matches[0])->map(function ($domain) {
-
             $domainArray = explode('"', $domain);
 
             if (isset($domainArray[1])) {
-
                 $preloadItem = (substr(trim($domainArray[1]), 0, 2) === '//') ? 'https:' . strtolower($domainArray[1]) : strtolower($domainArray[1]);
 
                 $type = '';
@@ -33,11 +34,9 @@ class InsertPreload
                 }
 
                 return "<link rel=\"preload\" href=\"{$preloadItem}\" as=\"{$type}\">";
-
-            }else{
+            } else {
                 return '';
             }
-
         })->unique()->implode("\n");
 
         $replace = ['#<head>(.*?)#' => "<head>\n{$preload}"];
@@ -47,10 +46,11 @@ class InsertPreload
 
     private static function contains($str, array $arr)
     {
-        foreach($arr as $a) {
-            if (stripos($str,$a) !== false) return true;
+        foreach ($arr as $a) {
+            if (stripos($str, $a) !== false) {
+                return true;
+            }
         }
         return false;
     }
-
 }
