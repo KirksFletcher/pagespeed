@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\View;
 use kirksfletcher\pagespeed\filters\RemoveComments;
 use kirksfletcher\pagespeed\filters\RemoveWhiteSpace;
+use Mockery\Exception;
 
 class Pagespeed
 {
@@ -29,13 +30,21 @@ class Pagespeed
 
                 if($this->allowDynamic) {
                     $cacheRef = md5(strtolower($view.$slug) . serialize($data));
+                    $tag = ($slug == '') ? md5(strtolower($view)) : md5(strtolower($slug));
+
+                    $view = Cache::tags([$tag])->rememberForever($cacheRef, function () use ($view, $data) {
+                        return $this->renderView($view, $data);
+                    });
                 }else{
                     $cacheRef = ($slug == '') ? md5(strtolower($view)) : md5(strtolower($slug));
+
+                    $view = Cache::rememberForever($cacheRef, function () use ($view, $data) {
+                        return $this->renderView($view, $data);
+                    });
                 }
 
-                $view = Cache::rememberForever($cacheRef, function () use ($view, $data) {
-                    return $this->renderView($view, $data);
-                });
+
+
             } else {
                 $view = $this->renderView($view, $data);
             }
@@ -54,7 +63,13 @@ class Pagespeed
     public function killCacheView($slug)
     {
         $slug = md5(strtolower($slug));
-        Cache::forget($slug);
+
+        if($this->allowDynamic){
+            Cache::tags([$slug])->flush();
+        }else{
+            Cache::forget($slug);
+        }
+
     }
 
     /**
@@ -84,7 +99,11 @@ class Pagespeed
      */
     public function allowDynamicContent($state = true)
     {
-        $this->allowDynamic = $state;
+        if(Cache::getStore() instanceof \Illuminate\Cache\TaggableStore) {
+            $this->allowDynamic = $state;
+        }else{
+            throw new Exception('Dynamic content caching requires memcached or redis enabled as the cache driver.');
+        }
     }
 
 
