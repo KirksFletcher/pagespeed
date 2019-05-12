@@ -12,6 +12,7 @@ class Pagespeed
 {
     protected $trimWhiteSpace = false;
     protected $removeComments = false;
+    protected $allowDynamic = false;
 
     /**
      * Render view, apply enabled filters, and cache output for lightning fast performance
@@ -25,7 +26,12 @@ class Pagespeed
     {
         try {
             if (!Auth::check()) {
-                $cacheRef = ($slug == '') ? md5(strtolower($view)) : md5(strtolower($slug));
+
+                if($this->allowDynamic) {
+                    $cacheRef = md5(strtolower($view.$slug) . serialize($data));
+                }else{
+                    $cacheRef = ($slug == '') ? md5(strtolower($view)) : md5(strtolower($slug));
+                }
 
                 $view = Cache::rememberForever($cacheRef, function () use ($view, $data) {
                     return $this->renderView($view, $data);
@@ -68,6 +74,17 @@ class Pagespeed
                 $this->removeComments = $enable;
                 break;
         }
+    }
+
+    /**
+     * Allow cache ref to be based on md5 of the page data + view + slug
+     * creates more cache files but allows dynamic content
+     *
+     * @param bool $state
+     */
+    public function allowDynamicContent($state = true)
+    {
+        $this->allowDynamic = $state;
     }
 
 
