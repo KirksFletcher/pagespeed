@@ -2,7 +2,6 @@
 
 namespace kirksfletcher\pagespeed\filters;
 
-
 class RemoveWhiteSpace
 {
 
@@ -10,7 +9,8 @@ class RemoveWhiteSpace
      * @param $view
      * @return null|string|string[]
      */
-    public static function render($view) {
+    public static function render($view)
+    {
         $replace = [
             "/\n([\S])/" => '$1',
             "/\r/" => '',
@@ -22,5 +22,4 @@ class RemoveWhiteSpace
 
         return preg_replace(array_keys($replace), array_values($replace), $view);
     }
-
 }

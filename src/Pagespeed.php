@@ -10,7 +10,6 @@ use kirksfletcher\pagespeed\filters\RemoveWhiteSpace;
 
 class Pagespeed
 {
-
     protected $trimWhiteSpace = false;
     protected $removeComments = false;
 
@@ -22,21 +21,21 @@ class Pagespeed
      * @param string $slug
      * @return mixed
      */
-    public function view($view, $data = [], $slug = '') {
-
+    public function view($view, $data = [], $slug = '')
+    {
         try {
-            if(!Auth::check()) {
+            if (!Auth::check()) {
                 $cacheRef = ($slug == '') ? md5(strtolower($view)) : md5(strtolower($slug));
 
                 $view = Cache::rememberForever($cacheRef, function () use ($view, $data) {
                     return $this->renderView($view, $data);
                 });
-            }else{
+            } else {
                 $view = $this->renderView($view, $data);
             }
 
             return $view;
-        }catch(\Exception $e){
+        } catch (\Exception $e) {
             return response($e->getMessage(), 420);
         }
     }
@@ -46,8 +45,8 @@ class Pagespeed
      *
      * @param $slug
      */
-    public function killCacheView($slug) {
-
+    public function killCacheView($slug)
+    {
         $slug = md5(strtolower($slug));
         Cache::forget($slug);
     }
@@ -58,8 +57,8 @@ class Pagespeed
      * @param $plugin
      * @param bool $enable
      */
-    public function plugin($plugin, $enable = true) {
-
+    public function plugin($plugin, $enable = true)
+    {
         $plugin = strtolower($plugin);
         switch ($plugin) {
             case 'trimwhitespace':
@@ -77,7 +76,8 @@ class Pagespeed
      * @param $data
      * @return null|string|string[]
      */
-    private function renderView($view, $data) {
+    private function renderView($view, $data)
+    {
         $cacheView = View::make($view, $data)->render();
 
         if ($this->trimWhiteSpace) {
