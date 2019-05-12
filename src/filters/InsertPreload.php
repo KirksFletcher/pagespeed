@@ -33,7 +33,7 @@ class InsertPreload
                     $type = 'image';
                 }
 
-                return "<link rel=\"preload\" href=\"{$preloadItem}\" as=\"{$type}\">";
+                return "<link rel=\"preload\" href=\"{$preloadItem}\" as=\"{$type}\" crossorigin>";
             } else {
                 return '';
             }

@@ -22,7 +22,7 @@ class InsertDNSPreconnect
                 if (array_key_exists('host', $domainParts)) {
                     $url = (array_key_exists('scheme', $domainParts)) ? $domainParts['scheme'] . '://' . $domainParts['host'] : 'https://' . $domainParts['host'];
 
-                    return "<link rel=\"preconnect\" href=\"{$url}\">";
+                    return "<link rel=\"preconnect\" href=\"{$url}\" crossorigin>";
                 } else {
                     return '';
                 }
