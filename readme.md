@@ -87,7 +87,7 @@ The above command is quite obvious and will clear the cache for the selected pro
 The above command can be called at any time (is usually best to call just after instantiating). This will apply the selected filters whilst building the cached rendered view.
 
 
-    $this->pagespeed->allowDynamic(BOOL);
+    $this->pagespeed->allowDynamicContent(BOOL);
     
 The above command will allow for dynamic page content but will create more caches. New caches will be generated if the data being passed to the view differs in anyway. All variations will be kept in cache and will be sent when the data, view, and slug match.
 
